@@ -1,30 +1,39 @@
-require_relative './console'
-
 class VirtualMachine
 
-  attr_reader :memory, :console
+  attr_reader :instructions, :console
 
-  def initialize(console = Console.new)
-    @memory = []
+  def initialize instructions, console
+    @instructions = instructions
     @console = console
   end
 
-  def run filepath
-    readfile filepath
-    Processor.new(memory, console).start
+  def start
+    run 0
   end
 
-  def readfile filepath
-    File.open(filepath, 'rb') do |file|
-      until file.eof? do
-        buffer = file.read(2)
-        memory << buffer.unpack('S')[0]
-      end
+  def run index
+    case instructions[index]
+    when 0
+      halt
+    when 19
+      print_ascii index
+    when 21
+      noop index
     end
   end
 
-  def memory_used
-    memory.length
+  def halt
+    exit
   end
+
+  def print_ascii index
+    console.print instructions[index + 1].chr
+    run index + 2
+  end
+
+  def noop index
+    run index + 1
+  end
+
 
 end
