@@ -1,22 +1,24 @@
+require_relative './console'
+
 class VirtualMachine
 
-  attr_reader :memory, :processor
+  attr_reader :memory, :console
 
-  def initialize processor
+  def initialize(console = Console.new)
     @memory = []
-    @processor = processor
+    @console = console
   end
 
   def run filepath
     readfile filepath
-    processor.run memory
+    Processor.new(memory, console).start
   end
 
   def readfile filepath
     File.open(filepath, 'rb') do |file|
       until file.eof? do
         buffer = file.read(2)
-        memory << buffer.unpack('S')
+        memory << buffer.unpack('S')[0]
       end
     end
   end
