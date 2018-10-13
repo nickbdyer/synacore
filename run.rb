@@ -1,7 +1,7 @@
 #! /usr/local/bin/ruby
 
+require './lib/loader.rb'
 require './lib/virtual_machine.rb'
-require './lib/processor.rb'
 require './lib/console.rb'
 
-VirtualMachine.new.run('./challenge.bin')
+VirtualMachine.new(Loader.new.readfile('./challenge.bin'), Console.new).start

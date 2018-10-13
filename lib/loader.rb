@@ -1,28 +1,19 @@
 class Loader
 
-  attr_reader :memory, :console
+  attr_reader :instructions
 
-  def initialize(console = Console.new)
-    @memory = []
-    @console = console
-  end
-
-  def run filepath
-    readfile filepath
-    VirtualMachine.new(memory, console).start
+  def initialize
+    @instructions = []
   end
 
   def readfile filepath
     File.open(filepath, 'rb') do |file|
       until file.eof? do
         buffer = file.read(2)
-        memory << buffer.unpack('S')[0]
+        instructions << buffer.unpack('S')[0]
       end
     end
-  end
-
-  def memory_used
-    memory.length
+    instructions
   end
 
 end
