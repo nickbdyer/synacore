@@ -1,9 +1,9 @@
 class VirtualMachine
 
-  attr_reader :instructions, :console
+  attr_reader :memory, :console
 
-  def initialize instructions, console
-    @instructions = instructions
+  def initialize memory, console
+    @memory = memory
     @console = console
   end
 
@@ -12,7 +12,7 @@ class VirtualMachine
   end
 
   def run index
-    case instructions[index]
+    case memory[index]
     when 0
       halt
     when 19
@@ -27,13 +27,12 @@ class VirtualMachine
   end
 
   def print_ascii index
-    console.print instructions[index + 1].chr
+    console.print memory[index + 1].chr
     run index + 2
   end
 
   def noop index
     run index + 1
   end
-
 
 end
