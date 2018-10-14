@@ -23,6 +23,12 @@ describe VirtualMachine do
     expect(vm.memory).to eq [2, 123, 3, 4, 123, 0]
   end
 
+  it '6: jumps to new memory location' do
+    vm = VirtualMachine.new([6, 4, 19, 65, 19, 66, 0], console)
+    expect{vm.start}.to raise_error SystemExit
+    expect(output.string).to eq "B"
+  end
+
   it '15: reads memory at one address and writes to another' do
     vm = VirtualMachine.new([21, 21, 19, 65, 15, 0, 2, 0], console)
     expect{vm.start}.to raise_error SystemExit

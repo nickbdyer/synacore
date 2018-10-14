@@ -22,6 +22,8 @@ class VirtualMachine
       push index
     when 3
       pop index
+    when 6
+      jump index
     when 15
       rmem index
     when 16
@@ -50,6 +52,11 @@ class VirtualMachine
     write_location = memory[index + 1]
     memory[write_location] = item
     run index + 2
+  end
+
+  def jump index
+    jump_location = memory[index + 1]
+    run jump_location
   end
 
   def rmem index
