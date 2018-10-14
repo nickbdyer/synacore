@@ -17,7 +17,7 @@ class VirtualMachine
   end
 
   def run
-    halt if @index > memory.length
+    return if @index > memory.length
     case memory[@index]
     when 0
       halt
@@ -42,6 +42,8 @@ class VirtualMachine
     end
     run
   end
+
+  private
 
   def halt
     exit
@@ -94,8 +96,6 @@ class VirtualMachine
   def noop
     @index += 1
   end
-
-  private
 
   def get_value number
     return get_register number if (32768..32775).include? number
