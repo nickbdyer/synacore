@@ -9,35 +9,37 @@ class VirtualMachine
     @console = console
     @stack = Stack.new
     @register = []
+    @index = 0
   end
 
   def start
-    run 0
+    run
   end
 
-  def run index
-    halt if index > memory.length
-    case memory[index]
+  def run
+    halt if @index > memory.length
+    case memory[@index]
     when 0
       halt
     when 1
-      set index
+      set
     when 2
-      push index
+      push
     when 3
-      pop index
+      pop
     when 6
-      jump index
+      jump
     when 15
-      rmem index
+      rmem
     when 16
-      wmem index
+      wmem
     when 19
-      print_ascii index
+      print_ascii
     when 21
-      noop index
+      noop
     else
-      run index + 1
+      @index += 1
+      run
     end
   end
 
@@ -45,51 +47,59 @@ class VirtualMachine
     exit
   end
 
-  def set index
-    register_no = memory[index + 1] - 32768
-    register[register_no] = memory[index + 2]
-    run index + 3
+  def set
+    register_no = memory[@index + 1] - 32768
+    register[register_no] = memory[@index + 2]
+    @index += 3
+    run
   end
 
-  def push index
-    item = memory[index + 1]
+  def push
+    item = memory[@index + 1]
     stack.push item
-    run index + 2
+    @index += 2
+    run
   end
 
-  def pop index
+  def pop
     item = stack.pop
-    write_location = memory[index + 1]
+    write_location = memory[@index + 1]
     memory[write_location] = item
-    run index + 2
+    @index += 2
+    run
   end
 
-  def jump index
-    jump_location = memory[index + 1]
-    run jump_location
+  def jump
+    jump_location = memory[@index + 1]
+    @index = jump_location
+    run
   end
 
-  def rmem index
-    write_location = memory[index + 1]
-    read_location = memory[index + 2]
+  def rmem
+    write_location = memory[@index + 1]
+    read_location = memory[@index + 2]
     memory[write_location] = memory[read_location]
-    run index + 3
+    @index += 3
+    run
   end
 
-  def wmem index
-    write_location = memory[index + 1]
-    value = memory[index + 2]
+  def wmem
+    write_location = memory[@index + 1]
+    value = memory[@index + 2]
     memory[write_location] = value
-    run index + 3
+    @index +=3
+    run
   end
 
-  def print_ascii index
-    console.print memory[index + 1].chr
-    run index + 2
+  def print_ascii
+    console.print memory[@index + 1].chr
+    @index += 2
+    run
   end
 
-  def noop index
-    run index + 1
+  def noop
+    @index += 1
+    run
   end
 
 end

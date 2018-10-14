@@ -7,8 +7,8 @@ describe VirtualMachine do
   let (:console) { Console.new(StringIO.new, output) }
 
   it 'terminates the process if trying to access area outside of memory' do
-    vm = VirtualMachine.new([0], console)
-    expect{vm.run(3)}.to raise_error SystemExit
+    vm = VirtualMachine.new([21], console)
+    expect{vm.run}.to raise_error SystemExit
   end
 
   it '0: terminates the process' do
