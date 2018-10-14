@@ -12,10 +12,6 @@ class VirtualMachine
     @index = 0
   end
 
-  def start
-    run
-  end
-
   def run
     return if @index > memory.length
     case memory[@index]
