@@ -46,6 +46,30 @@ describe VirtualMachine do
     expect(output.string).to eq "B"
   end
 
+  it '7a: jumps to new memory location conditionally' do
+    vm = VirtualMachine.new([7, 30000, 5, 19, 65, 19, 66], console)
+    vm.start
+    expect(output.string).to eq "B"
+  end
+
+  it '7b: does not jump to new memory location conditionally' do
+    vm = VirtualMachine.new([7, 0, 5, 19, 65, 19, 66], console)
+    vm.start
+    expect(output.string).to eq "AB"
+  end
+
+  it '8a: jumps to new memory location conditionally' do
+    vm = VirtualMachine.new([8, 0, 5, 19, 65, 19, 66], console)
+    vm.start
+    expect(output.string).to eq "B"
+  end
+
+  it '8b: does not jump to new memory location conditionally' do
+    vm = VirtualMachine.new([8, 30000, 5, 19, 65, 19, 66], console)
+    vm.start
+    expect(output.string).to eq "AB"
+  end
+
   it '15: reads memory at one address and writes to another' do
     vm = VirtualMachine.new([21, 21, 19, 65, 15, 32768, 2], console)
     vm.start

@@ -29,6 +29,10 @@ class VirtualMachine
       pop
     when 6
       jump
+    when 7
+      jt
+    when 8
+      jf
     when 15
       rmem
     when 16
@@ -71,6 +75,16 @@ class VirtualMachine
   def jump
     jump_location = get_value(memory[@index + 1])
     @index = jump_location
+  end
+
+  def jt
+    jump_location = get_value(memory[@index + 2])
+    @index = memory[@index + 1] != 0 ? jump_location : @index + 3
+  end
+
+  def jf
+    jump_location = get_value(memory[@index + 2])
+    @index = memory[@index + 1] == 0 ? jump_location : @index + 3
   end
 
   def rmem
