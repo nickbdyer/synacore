@@ -16,6 +16,12 @@ describe VirtualMachine do
     expect{vm.start}.to raise_error SystemExit
   end
 
+  it '1: sets a register' do
+    vm = VirtualMachine.new([1, 32768, 123, 0], console)
+    expect{vm.start}.to raise_error SystemExit
+    expect(vm.register[0]).to eq 123
+  end
+
   it '2: puts an item on the stack' do
     vm = VirtualMachine.new([2, 123, 0], console)
     expect{vm.start}.to raise_error SystemExit

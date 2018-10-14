@@ -2,12 +2,13 @@ require 'stack'
 
 class VirtualMachine
 
-  attr_reader :memory, :console, :stack
+  attr_reader :memory, :console, :stack, :register
 
   def initialize memory, console
     @memory = memory
     @console = console
     @stack = Stack.new
+    @register = []
   end
 
   def start
@@ -19,6 +20,8 @@ class VirtualMachine
     case memory[index]
     when 0
       halt
+    when 1
+      set index
     when 2
       push index
     when 3
@@ -40,6 +43,12 @@ class VirtualMachine
 
   def halt
     exit
+  end
+
+  def set index
+    register_no = memory[index + 1] - 32768
+    register[register_no] = memory[index + 2]
+    run index + 3
   end
 
   def push index
