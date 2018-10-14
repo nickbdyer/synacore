@@ -6,6 +6,11 @@ describe VirtualMachine do
   let (:output) { StringIO.new }
   let (:console) { Console.new(StringIO.new, output) }
 
+  it 'terminates the process if trying to access area outside of memory' do
+    vm = VirtualMachine.new([0], console)
+    expect{vm.run(3)}.to raise_error SystemExit
+  end
+
   it '0: terminates the process' do
     vm = VirtualMachine.new([0], console)
     expect{vm.start}.to raise_error SystemExit

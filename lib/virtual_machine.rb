@@ -15,6 +15,7 @@ class VirtualMachine
   end
 
   def run index
+    halt if index > memory.length
     case memory[index]
     when 0
       halt
