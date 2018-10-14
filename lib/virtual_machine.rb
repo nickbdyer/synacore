@@ -39,8 +39,8 @@ class VirtualMachine
       noop
     else
       @index += 1
-      run
     end
+    run
   end
 
   def halt
@@ -51,14 +51,12 @@ class VirtualMachine
     register_no = memory[@index + 1] - 32768
     register[register_no] = get_value(memory[@index + 2])
     @index += 3
-    run
   end
 
   def push
     item = get_value(memory[@index + 1])
     stack.push item
     @index += 2
-    run
   end
 
   def pop
@@ -66,13 +64,11 @@ class VirtualMachine
     register_no = memory[@index + 1] - 32768
     register[register_no] = item
     @index += 2
-    run
   end
 
   def jump
     jump_location = get_value(memory[@index + 1])
     @index = jump_location
-    run
   end
 
   def rmem
@@ -80,7 +76,6 @@ class VirtualMachine
     read_location = memory[@index + 2]
     register[register_no] = memory[read_location]
     @index += 3
-    run
   end
 
   def wmem
@@ -88,19 +83,16 @@ class VirtualMachine
     value = get_value(memory[@index + 2])
     memory[write_location] = value
     @index +=3
-    run
   end
 
   def print_ascii
     character = get_value(memory[@index + 1]).chr
     console.print character
     @index += 2
-    run
   end
 
   def noop
     @index += 1
-    run
   end
 
   private
