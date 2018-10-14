@@ -49,13 +49,13 @@ class VirtualMachine
 
   def set
     register_no = memory[@index + 1] - 32768
-    register[register_no] = memory[@index + 2]
+    register[register_no] = get_value(memory[@index + 2])
     @index += 3
     run
   end
 
   def push
-    item = memory[@index + 1]
+    item = get_value(memory[@index + 1])
     stack.push item
     @index += 2
     run
@@ -63,36 +63,37 @@ class VirtualMachine
 
   def pop
     item = stack.pop
-    write_location = memory[@index + 1]
-    memory[write_location] = item
+    register_no = memory[@index + 1] - 32768
+    register[register_no] = item
     @index += 2
     run
   end
 
   def jump
-    jump_location = memory[@index + 1]
+    jump_location = get_value(memory[@index + 1])
     @index = jump_location
     run
   end
 
   def rmem
-    write_location = memory[@index + 1]
+    register_no = memory[@index + 1] - 32768
     read_location = memory[@index + 2]
-    memory[write_location] = memory[read_location]
+    register[register_no] = memory[read_location]
     @index += 3
     run
   end
 
   def wmem
     write_location = memory[@index + 1]
-    value = memory[@index + 2]
+    value = get_value(memory[@index + 2])
     memory[write_location] = value
     @index +=3
     run
   end
 
   def print_ascii
-    console.print memory[@index + 1].chr
+    character = get_value(memory[@index + 1]).chr
+    console.print character
     @index += 2
     run
   end
@@ -100,6 +101,17 @@ class VirtualMachine
   def noop
     @index += 1
     run
+  end
+
+  private
+
+  def get_value number
+    return get_register number if (32768..32775).include? number
+    number
+  end
+
+  def get_register number
+    register[number - 32768]
   end
 
 end

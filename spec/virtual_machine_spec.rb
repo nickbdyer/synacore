@@ -22,16 +22,22 @@ describe VirtualMachine do
     expect(vm.register[0]).to eq 123
   end
 
+  it 'reads a value from the register' do
+    vm = VirtualMachine.new([1, 32768, 65, 19, 32768, 0], console)
+    expect{vm.start}.to raise_error SystemExit
+    expect(output.string).to eq "A"
+  end
+
   it '2: puts an item on the stack' do
     vm = VirtualMachine.new([2, 123, 0], console)
     expect{vm.start}.to raise_error SystemExit
     expect(vm.stack.peek).to eq 123
   end
 
-  it '3: pops top of stack and write to memory' do
-    vm = VirtualMachine.new([2, 123, 3, 4, 21, 0], console)
+  it '3: pops top of stack and write to register' do
+    vm = VirtualMachine.new([2, 123, 3, 32768, 0], console)
     expect{vm.start}.to raise_error SystemExit
-    expect(vm.memory).to eq [2, 123, 3, 4, 123, 0]
+    expect(vm.register[0]).to eq 123
   end
 
   it '6: jumps to new memory location' do
@@ -41,9 +47,9 @@ describe VirtualMachine do
   end
 
   it '15: reads memory at one address and writes to another' do
-    vm = VirtualMachine.new([21, 21, 19, 65, 15, 0, 2, 0], console)
+    vm = VirtualMachine.new([21, 21, 19, 65, 15, 32768, 2, 0], console)
     expect{vm.start}.to raise_error SystemExit
-    expect(vm.memory).to eq [19, 21, 19, 65, 15, 0, 2, 0]
+    expect(vm.register[0]).to eq 19
   end
 
   it '16: writes value into memory postion' do
